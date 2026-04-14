@@ -32,29 +32,24 @@ export default defineConfig({
     },
   },
   plugins: [
-    codeInspectorPlugin({
-      bundler: 'vite',
-    }),
-    {
-      name: 'treat-js-files-as-jsx',
-      async transform(code, id) {
-        if (!/src\/.*\.js$/.test(id)) {
-          return null;
-        }
+  codeInspectorPlugin({
+    bundler: 'vite',
+  }),
+  {
+    name: 'treat-js-files-as-jsx',
+    async transform(code, id) {
+      if (!/src\/.*\.js$/.test(id)) {
+        return null;
+      }
 
-        // Use the exposed transform from vite, instead of directly
-        // transforming with esbuild
-        return transformWithEsbuild(code, id, {
-          loader: 'jsx',
-          jsx: 'automatic',
-        });
-      },
+      return transformWithEsbuild(code, id, {
+        loader: 'jsx',
+        jsx: 'automatic',
+      });
     },
-    react(),
-    vitePluginSemi({
-      cssLayer: true,
-    }),
-  ],
+  },
+  react(),
+],
   optimizeDeps: {
     force: true,
     esbuildOptions: {
